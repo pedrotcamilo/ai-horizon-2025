@@ -4,31 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/painelAdmin.css">
 </head>
-<style>
-    input {
-        height: 100px;
-    }
-
-    input:hover {
-        background-color: blue;
-        color: white;
-    }
-</style>
 <body>
-    <h1>AI HORIZON 2025</h1>
-    <h3>Painel de gerenciamento</h3><br>
+    <div class="main">
+        <h1>AI HORIZON 2025</h1>
+        <h3>Painel de gerenciamento</h3><br>
 
-    <p>Status do servidor: <b style="color: rgb(0, 150, 0);">ONLINE</b></p>
-    <p>Ping do servidor: <b>10ms</b></p>
-    <input type="text" name="" id="" placeholder="IP Servidor">
-    <input type="text" name="" id="" placeholder="Porta Servidor">
-    <input type="button" value="Salvar Alterações"><br><br>
+        <p>Status do servidor: <b style="color: rgb(0, 150, 0);">ONLINE</b></p>
+        <p>Ping do servidor: <b>10ms</b></p>
 
-    <input type="button" value="Iniciar servidor">
-    <input type="button" value="Desligar servidor">
-    <input type="button" value="Reiniciar servidor">
-    <input type="button" value="Limpar chats">
-    <input type="button" value="Retornar aplicação" onclick="window.location.replace('index.html')">
+        <input type="button" value="Ações servidor" onclick="menuAcoesServidor()">
+        <input type="button" value="Ações aplicativo" onclick="menuAcoesAplicativo()">
+        <input type="button" value="Configurar servidor" onclick="menuAcoesServidorConfig()">
+        <br>
+
+        <div id="acoesServidor" style="display: none;">
+            <h3>Ações servidor</h3>
+            <input type="button" value="Iniciar servidor">
+            <input type="button" value="Desligar servidor">
+            <input type="button" value="Reiniciar servidor">
+        </div>
+
+        <div id="acoesAplicativo" style="display: none;">
+            <h3>Ações aplicativo</h3>
+            <input type="button" value="Limpar chats">
+            <input type="button" value="Retornar aplicação" onclick="window.location.replace('index.html')">
+        </div>
+
+        <div id="acoesServidorConfig" style="display: none;">
+            <h3>Alterar IP Servidor</h3>
+            <input type="text" name="" id="" placeholder="IP Servidor">
+            <input type="text" name="" id="" placeholder="Porta Servidor">
+            <input type="button" value="Salvar alterações">
+        </div>
+    </div>
+
+    <script src="js/painelAdmin.js"></script>
 </body>
 </html>

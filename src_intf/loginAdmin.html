@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/loginAdmin.css">
+</head>
+<body>
+    <div class="promptSenha" id="promptSenha" align="center">
+        <h3>Por favor autentique-se</h3>
+        <h1 id="senha">-</h1>
+        <div class="numpad">
+            <input type="button" value="1" onclick="addNumSenha(1)">
+            <input type="button" value="2" onclick="addNumSenha(2)">
+            <input type="button" value="3" onclick="addNumSenha(3)"><br>
+
+            <input type="button" value="4" onclick="addNumSenha(4)">
+            <input type="button" value="5" onclick="addNumSenha(5)">
+            <input type="button" value="6" onclick="addNumSenha(6)"><br>
+
+            <input type="button" value="7" onclick="addNumSenha(7)">
+            <input type="button" value="8" onclick="addNumSenha(8)">
+            <input type="button" value="9" onclick="addNumSenha(9)"><br>
+
+            <input type="button" value="←" onclick="window.location.replace('index.html')">
+            <input type="button" value="OK" onclick="autenticar()">
+            <input type="button" value="⌫" onclick="removerNumSenha()">
+        </div>
+    </div>
+
+    <p>Você está no painel do administrador, caso entrou por engano, aperte o botão <b>[←]</b></p>
+    <script src="js/loginAdmin.js"></script>
+</body>
+</html>

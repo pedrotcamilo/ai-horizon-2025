@@ -1,0 +1,8 @@
+input {
+    height: 100px;
+}
+
+input:hover {
+    background-color: blue;
+    color: white;
+}

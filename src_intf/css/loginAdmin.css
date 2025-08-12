@@ -1,0 +1,32 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input {
+    height: 100px;
+    width: 100px;
+}
+
+.promptSenha{
+    position: absolute;
+    top: 20%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto auto auto;
+    scale: 150%;
+}
+
+.promptSenha input {
+    font-size: 250%;
+    font-weight: bolder;
+}
+
+.promptSenha input:hover {
+    background-color: blue;
+    color: white;
+}
