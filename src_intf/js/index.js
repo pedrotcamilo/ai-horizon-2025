@@ -7,14 +7,11 @@ function abrirAdmin() {
         qntAbrirAdmin = 0
         senhaInserida = prompt("Digite a senha de administrador")
 
-        if (senhaInserida === "123"){
-            user="Pedro"
-        } else {
+        if (senhaInserida != "123"){
             alert("Senha incorreta!")
             return
         }
         
-        alert(`Bem-vindo, ${user}`)
         window.location.replace('painelAdmin.html')
     }
 }
