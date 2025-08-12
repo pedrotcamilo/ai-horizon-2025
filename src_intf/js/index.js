@@ -8,9 +8,13 @@ function abrirAdmin() {
         senhaInserida = prompt("Digite a senha de administrador")
 
         if (senhaInserida === "123"){
-            window.location.replace('painelAdmin.html')
+            user="Pedro"
         } else {
             alert("Senha incorreta!")
+            return
         }
+        
+        alert(`Bem-vindo, ${user}`)
+        window.location.replace('painelAdmin.html')
     }
 }
