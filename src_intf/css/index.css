@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Potta+One&display=swap');
+
+/*
+===== Fontes =====
+Texto principal - Red Hat Display
+Textos marcados - Potta one
+
+===== Cores =====
+Textos marcados - #8A6FFE (Stroke: #0000, peso 1, lado de fora)
+Textos normais - #0000
+Subtitulos - #888888
+*/
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Red Hat Display', system-ui;
+    font-weight: bold;
+}
+
+/* Background */
+.background {
+    position: absolute;
+    z-index: -1000;
+    height: 100%;
+}
+
+.background #nuvens {
+    display: block;
+    margin: auto;
+    width: 95%;
+}
+
+.background #hbc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto 0 0;
+}
+
+.background #pincel {
+    position: absolute;
+    right: 1%;
+}
+
+/* Parte principal */
+.nome {
+    font-family: 'Potta one';
+    color: #8A6FFE;
+    -webkit-text-stroke: .1px black;
+    font-size: 150%;
+}
+
+.titulo {
+    display: table-cell;
+    whitespace: no-wrap;
+    font-size: 300%;
+    font-weight: bolder;
+    padding-top: 50%;
+    padding-bottom: 50%;
+}
+
+.subtitulo {
+    color: #888888;
+    font-weight: normal;
+}
+
+.proseguir {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: -70%;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto auto 0;
+}
