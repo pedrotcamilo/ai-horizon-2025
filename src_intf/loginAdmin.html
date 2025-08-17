@@ -8,8 +8,6 @@
 </head>
 <body>
     <div class="promptSenha" id="promptSenha" align="center">
-        <h3>Por favor autentique-se</h3>
-        <h1 id="senha">-</h1>
         <div class="numpad">
             <input type="button" value="1" onclick="addNumSenha(1)">
             <input type="button" value="2" onclick="addNumSenha(2)">
@@ -23,13 +21,21 @@
             <input type="button" value="8" onclick="addNumSenha(8)">
             <input type="button" value="9" onclick="addNumSenha(9)"><br>
 
+            <!--
             <input type="button" value="←" onclick="window.location.replace('index.html')">
-            <input type="button" value="OK" onclick="autenticar()">
+            <input type="button" value="OK" onclick="autenticar()" style="background-color: lime;">
             <input type="button" value="⌫" onclick="removerNumSenha()">
+            -->
         </div>
     </div>
 
-    <p>Você está no painel do administrador, caso entrou por engano, aperte o botão <b>[←]</b></p>
+    <p style="position: absolute; top: 45%; left: 10%;">Você está no painel do administrador, caso entrou por engano, retorne</p>
+    <p style="position: absolute; top: 50%; left: 10%;">Insira a senha para abrir o paínel de Administrador</p>
+
+    <input type="button" value="Retornar" onclick="window.location.replace('index.html')">
+    <input type="button" value="Remover" onclick="removerNumSenha()" style="color: red;">
+    <input type="button" value="Acessar" onclick="autenticar()" style="color: lime;">
+    <input type="password" id="senha" value="">
     <script src="js/loginAdmin.js"></script>
 </body>
 </html>

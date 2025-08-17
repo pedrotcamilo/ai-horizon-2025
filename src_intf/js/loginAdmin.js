@@ -2,19 +2,19 @@ senhaIns = ""
 tentativasFaltando = 5
 
 function addNumSenha(n) {
-    if (senhaIns === "-") {
+    if (senhaIns === "") {
         senhaIns = ""
     }
     senhaIns += n.toString()
-    document.getElementById("senha").innerHTML = senhaIns
+    document.getElementById("senha").value = senhaIns
 }
 
 function removerNumSenha() {
     senhaIns = senhaIns.slice(0, -1)
     if (senhaIns === "") {
-        senhaIns = "-"
+        senhaIns = ""
     }
-    document.getElementById("senha").innerHTML = senhaIns
+    document.getElementById("senha").value = senhaIns
 }
 
 function autenticar() {
