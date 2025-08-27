@@ -6,22 +6,11 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
-<body>
-    <div class="background">
-        <img src="content/Wavy Buddies Clouds.png" id="nuvens">
-        <img src="content/Happy Bunch Chatting.png" id="hbc">
-        <img src="content/Fresh Folk Brush.png" id="pincel">
-    </div>
-    <div class="main" align="center">
-        <div class="titulo">
-            <span style="padding-right: 25px;">Olá! Me chamo</span>
-            <span class="nome">null</span><br>
-            <span class="subtitulo"><i>Vamos conversar?</i></span>
-        </div>
-        <img src="content/Goodies Short Arrow.png" class="proseguir">
-    </div> 
-    
+<body class="overflow-hidden">
     <input type="button" value="Painel admin" class="pA" onclick="abrirAdmin();">
+    
+    <img src="content/GoodiesShortArrow.png" id="btnProsseguir" class="absolute bottom-0 right-5 animate-pulse hover:animate-ping object-contain">
     <script src="js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </body>
 </html>

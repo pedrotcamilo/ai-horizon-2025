@@ -19,7 +19,7 @@ function removerNumSenha() {
 
 function autenticar() {
     if (tentativasFaltando <=0) {
-        window.location.replace('index.html')
+        window.location.replace('../index.html')
         return
     }
 
