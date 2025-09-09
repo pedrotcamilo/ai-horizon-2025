@@ -12,6 +12,6 @@ function abrirAdmin() {
 
     if (qntAbrirAdmin >= 10) {
         qntAbrirAdmin = 0;
-        window.location.replace('admin/loginAdmin.html')
+        window.location.replace('pgDebug.html')
     }
 }

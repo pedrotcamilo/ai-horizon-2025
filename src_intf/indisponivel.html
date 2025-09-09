@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        font-family: Arial;
+    }
+</style>
+<script>
+    retornarRest=10
+    function retornar() {
+        retornarRest--
+        if (retornarRest <= 0) {
+            window.location.replace('pgDebug.html')
+        }
+    }
+</script>
+<body>
+    <h1 align="center" onclick="retornar()">Totem indisponível</h1>
+    <p align="center">Por favor volte mais tarde, desculpa a incoveniência!</p>
+</body>
+</html>
