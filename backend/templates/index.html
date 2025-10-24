@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body class="overflow-hidden">
+    <input type="button" value="Painel admin" class="pA" onclick="abrirAdmin();">
+    
+    <img src="content/GoodiesShortArrow.png" id="btnProsseguir" class="absolute bottom-0 right-5 animate-pulse hover:animate-ping object-contain">
+
+    <div class="animate-pulse" id="carregandoTexto" style="display: none;">
+        <img src="content/icons/Load.svg" class="icoCarregando absolute top-[5vh] right-[5vh] animate-spin">
+        <p class="font-bold absolute top-[5vh] right-[10vh] normal-case">Carregando...</p>
+    </div>
+    <script src="js/index.js"></script>
+    <script src="js/TailwindCSS.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        font-family: Arial;
+        font-size: 150%;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        background-color: black;
+        color: white;
+    }
+
+    a {
+        color: lime;
+    }
+</style>
+<script>
+    let indsQnt = 6
+    let redQnt = 2
+    let pagina = window.location.href
+    let paginaSplit = pagina.split("/")
+    let paginaRaw = `http://${paginaSplit[2]}`
+    
+    function cancelar(arg) {
+        document.getElementById("msgAviso").innerHTML = `⚠️ Todas as ações foram canceladas!`
+        indsQnt = 6
+        redQnt = 2
+    }
+
+    function limpar() { document.getElementById("msgAviso").innerHTML = "" }
+
+    function indisponivel() {
+        indsQnt--
+        document.getElementById("msgAviso").innerHTML = `⚠️ Indisponivalizar é uma ação perigosa, para confirmar, aperte mais ${indsQnt} o mesmo botão`
+
+        if (indsQnt === 0) {
+            indsQnt = 6
+            fetch(`${paginaRaw}/api/etapa?atualizarManualmente=7`)
+                .then(function() {
+                    location.reload()
+            })
+        }
+    }
+
+    function redirecionar(url) {
+        redQnt--
+        document.getElementById("msgAviso").innerHTML = `Para confirmar, aperte o mesmo botão novamente.`
+
+        if (redQnt === 0) {
+            redQnt = 2
+            fetch(`${paginaRaw}/api/etapa?atualizarManualmente=${parseInt(url)}`)
+                .then(function() {
+                    location.reload()
+                })
+        }
+    }
+</script>
+<body>
+    <h1>LIRIA PÁGINA DEBUG</h1>
+    <div>
+        <h3>Mapa do app [EM ORDEM]</h3>
+
+        <a onclick='redirecionar(0)' target="_blank">> index.html <</a><br>
+        <a onclick='redirecionar(1)' target="_blank">> apresentacao.html <</a><br>
+        <a onclick='redirecionar(2)' target="_blank">> IAra.html <</a><br>
+        <a onclick='redirecionar(3)' target="_blank">> imaginacao.html <</a><br>
+        <a onclick='redirecionar(4)' target="_blank">> imaginacaoResultado.html <</a><br>
+        <a onclick='redirecionar(5)' target="_blank">> IACarregando.html <</a><br>
+        <a onclick='redirecionar(6)' target="_blank">> resultado.html <</a><br><br>
+
+        <h3>Acesso rápido</h3>
+        <a onclick="indisponivel()" style="color: red"> > Indisponivalizar <</a><br>
+
+        <h3>Ações</h3>
+        <a onclick="cancelar(0)" style="color: aquamarine"> [ Cancelar ações ]</a>
+        <a onclick="limpar()" style="color: mediumaquamarine"> [ Limpar avisos ]</a>
+    </div>
+
+    <p id="msgAviso"></p>
+</body>
+</html>

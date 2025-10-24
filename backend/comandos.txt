@@ -1,0 +1,10 @@
+curl http://localhost:5000/api/elevarEtapa
+curl http://localhost:5000/api/etapa?atualizarManualmente=
+
+1> index.html
+2> apresentacao.html
+3> IAra.html
+4> imaginacao.html
+5> imaginacaoResultado.html
+6> IACarregando.html
+7> resultado.html

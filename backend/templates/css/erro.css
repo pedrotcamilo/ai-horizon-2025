@@ -1,0 +1,11 @@
+body {
+    background-image: url("../content/intf/Erro.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-color: white;
+}
+
+html {
+    height: 100%;
+}
