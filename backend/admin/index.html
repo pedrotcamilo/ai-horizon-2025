@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>
+<body>
+    <h3 id="nome">Nome do usuário: Nenhum</h3>
+    <h3 id="etapa">Etapa: 0</h3>
+    <h3 id="frase">Esperando frase...</h3>
+
+    <input type="button" value="Elevar etapa" onclick="etapa(1)">
+    <input type="button" value="Descer etapa" onclick="etapa(2)"><br>
+
+    <iframe src="" frameborder="0" id="iframe" style="pointer-events: none;" width="500" height="300" sandbox style="overflow: hidden;"></iframe><br>
+    
+    <h3>Aprovação de imagem</h3>
+    <input type="button" value="Aprovar imagem" onclick="acoesimagem(1)">
+    <input type="button" value="Recusar imagem" onclick="acoesimagem(2)">
+    <input type="button" value="Regenerar imagem" onclick="acoesimagem(3)"><br><br>
+
+    <img src="" alt="" id="imagemRecebida">
+
+    <script src="/gerenciar/js/index.js"></script>
+</body>
+</html>

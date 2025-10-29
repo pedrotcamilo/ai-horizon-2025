@@ -16,7 +16,7 @@ function animacao() {
     } else {
         setTimeout(() => {
             window.location.href = `${paginaRaw}/api/elevarEtapa`;
-        }, 2000);
+        }, 5000);
     }
 }
 

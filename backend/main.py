@@ -12,6 +12,11 @@ load_dotenv()
 
 etapa = 0
 frase_global = "Olá, prazer, eu me chamo Líria, a minha pergunta é, como você imagina o mundo se a paz mundial fosse adquirida? Darei um tempinho para você pensar, não se preocupe."
+usuario = "Nenhum"
+imagem_aprovada = 0
+imagem_necessita_aprovacao = 0
+url_imagem = ""
+prompt_mundo_perfeito = ""
 
 client = OpenAI(
     api_key=os.getenv("OPENAI_CHAVE_API"),
@@ -30,7 +35,14 @@ CORS(app)
 @app.route('/')
 def carregar_interface():
     global etapa
-    if etapa == 0: return render_template("index.html")
+    global url_imagem
+    global usuario
+    global frase_global
+    if etapa == 0: 
+        url_imagem = "" 
+        usuario = ""
+        frase_global = "Olá, prazer, eu me chamo Líria, a minha pergunta é, como você imagina o mundo se a paz mundial fosse adquirida? Darei um tempinho para você pensar, não se preocupe."
+        return render_template("index.html")
     elif etapa == 1: return render_template("apresentacao.html")
     elif etapa == 2: return render_template("IAra.html")
     elif etapa == 3: return render_template("imaginacao.html")
@@ -42,6 +54,18 @@ def carregar_interface():
     else:
         etapa = 0
         return render_template("index.html")
+    
+@app.route('/gerenciar')
+def carregar_painel_gerenciamento():
+    return send_file(os.path.join(os.getcwd(), 'admin', 'index.html'))
+
+@app.route('/gerenciar/js/<filename>')
+def gerenciar_js_file(filename):
+    return send_file(os.path.join(os.getcwd(), 'admin', 'js', filename))
+
+@app.route('/gerenciar/css/<filename>')
+def gerenciar_css_file(filename):
+    return send_file(os.path.join(os.getcwd(), 'admin', 'css', filename))
 
 @app.route('/js/<filename>')
 def send_js_file(filename):
@@ -116,14 +140,24 @@ def servir_frase():
     global frase_global
     return frase_global
 
+@app.route('/api/gerenciar/<tipo>')
+def api_gerenciar(tipo):
+    if tipo == 'nome':
+        return usuario.capitalize()
+    if tipo == 'frase':
+        return frase_global
+
 # APIs (Gerações LLM)
 
 @app.route('/api/gerar_audio/', methods=["POST"])
 def gerar_audio():
     global frase_global
+    global usuario
 
     data = request.json
     nome = data.get("nome").lower()
+
+    usuario = nome
 
     if not nome:
         return jsonify({"erro": "Informe o nome"}), 400
@@ -176,6 +210,10 @@ def gerar():
     data = request.json
     nome = data.get("nome")
     mundo_perfeito = data.get("mundo_perfeito")
+    global url_imagem
+    global prompt_mundo_perfeito
+
+    prompt_mundo_perfeito = mundo_perfeito
 
     if not nome: return jsonify({"erro": "Informe o nome"}), 400
     if not mundo_perfeito: return jsonify({"erro": "Informe como você imagina o mundo perfeito"}), 400
@@ -210,6 +248,7 @@ def gerar():
         with open(filepath, "wb") as f: f.write(img_bytes)
 
         local_url = f"http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/imagem/{filename}"
+        url_imagem = local_url
         qr_local_url = f"http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/qrcode/{filename}"
 
         return jsonify({
@@ -221,6 +260,28 @@ def gerar():
 
     except Exception as e:
         return jsonify({"erro": f"Erro ao gerar conteúdo: {str(e)}"}), 500
+    
+@app.route('/api/status_imagem')
+def status_imagem():
+    global imagem_aprovada
+    aprovacao = request.args.get('aprovacao')
+
+    if aprovacao != None:
+        imagem_aprovada = int(aprovacao)
+        return 'ok'
+    
+    if int(aprovacao) == 1: return 'ok'
+    elif int(aprovacao) == 0: return 'wait'
+    elif int(aprovacao) == 2: return 'no'
+    else: return 'regen'
+
+@app.route('/api/imagem_gerada')
+def retornar_imagem_gerada():
+    return url_imagem
+
+@app.route('/api/prompt_mp')
+def prompt_mp():
+    return prompt_mundo_perfeito
 
 if __name__ == '__main__':
     app.run(host=os.getenv("HOST"), port=int(os.getenv("PORTA")))

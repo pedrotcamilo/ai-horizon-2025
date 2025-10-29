@@ -12,7 +12,7 @@ function startTimer(seconds) {
         seg--;
         if (seg < 0) {
             clearInterval(timer);
-            fetch(`${paginaRaw}/api/etapa?atualizarManualmente=4`)
+            fetch(`${paginaRaw}/api/elevarEtapa`)
                 .then(function() {
                     location.reload()
                 })
