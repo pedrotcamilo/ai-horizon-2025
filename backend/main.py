@@ -23,7 +23,6 @@ client = OpenAI(
 
 if not os.path.exists('imagens'): os.makedirs('imagens')
 if not os.path.exists('audios'): os.makedirs('audios')
-if not os.path.exists('qrcode'): os.makedirs('qrcode')
 
 app = Flask(__name__)
 CORS(app)
@@ -101,13 +100,6 @@ def servir_imagem(filename):
         return send_file(os.path.join(os.getcwd(), 'imagens', filename))
     except Exception as e:
         return f"Erro carregando a imagem: <br> {str(e)}", 500
-    
-@app.route('/api/qrcode/<filename>')
-def servir_qrcode(filename):
-    try:
-        return send_file(os.path.join(os.getcwd(), 'qrcode', filename))
-    except Exception as e:
-        return f"Erro carregando o qrcode: <br> {str(e)}", 500
 
 @app.route('/api/audio/<filename>')
 def servir_audio(filename):
