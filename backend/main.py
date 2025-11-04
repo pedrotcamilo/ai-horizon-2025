@@ -120,6 +120,10 @@ def servir_audio(filename):
             return send_file(os.path.join(os.getcwd(), 'audios', filename))
     except Exception as e:
         return f"Erro carregando o audio: <br> {str(e)}", 500
+    
+@app.route('/api/frase')
+def servir_frase():
+    return frase_global
 
 # APIs (Gerações LLM)
 
@@ -224,7 +228,6 @@ def gerar():
 
         local_url = f"http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/imagem/{filename}"
         url_imagem = local_url
-        qr_local_url = f"http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/qrcode/{filename}"
 
         json_imagem_gerada = {
             "nome": nome,
@@ -236,6 +239,26 @@ def gerar():
 
     except Exception as e:
         return jsonify({"erro": f"Erro ao gerar conteúdo: {str(e)}"}), 500
+    
+@app.route("/api/receberMundoPerfeito", methods=["POST"])
+def receber_mundo_perfeito():
+    global prompt_mundo_perfeito
+    data = request.json
+
+    prompt_mundo_perfeito = data.get("mundo_perfeito")
+    return "Ok", 200
+
+@app.route("/api/mundo_perfeito")
+def retornar_mundo_perfeito():
+    return prompt_mundo_perfeito
+
+@app.route('/api/url_imagem')
+def retornar_url_imagem():
+    return url_imagem
+
+@app.route('/api/usuario')
+def retornar_usuario():
+    return usuario
 
 if __name__ == '__main__':
     app.run(host=os.getenv("HOST"), port=int(os.getenv("PORTA")))

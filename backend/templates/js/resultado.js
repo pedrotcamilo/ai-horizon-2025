@@ -9,7 +9,8 @@ document.getElementById("btnVoltar").onclick = function () {
         })
 }
 
-fetch(`${paginaRaw}/api/json_imagem_gerada`)
+fetch(`${paginaRaw}/api/url_imagem`)
+    .then(response => response.text())
     .then(data => {
-            document.getElementById("imagem").src = data.imagem_url
+            document.getElementById("imagem").src = data
         })
