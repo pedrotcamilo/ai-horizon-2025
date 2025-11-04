@@ -8,3 +8,8 @@ document.getElementById("btnVoltar").onclick = function () {
             location.reload()
         })
 }
+
+fetch(`${paginaRaw}/api/json_imagem_gerada`)
+    .then(data => {
+            document.getElementById("imagem").src = data.imagem_url
+        })

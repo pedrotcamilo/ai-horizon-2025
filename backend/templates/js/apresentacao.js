@@ -17,11 +17,9 @@ document.getElementById("btnProsseguir").onclick = function(e) {
             "Content-type": "application/json; charset=UTF-8"
         }
     })
-        .then(function() {
-            fetch(`${paginaRaw}/api/elevarEtapa`)
-                .then(function() {
-                    location.reload()
-                })
-        })
 
+    fetch(`${paginaRaw}/api/elevarEtapa`)
+        .then(function() {
+            location.reload()
+        })
 }

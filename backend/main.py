@@ -6,17 +6,15 @@ from openai import OpenAI
 import os
 import base64
 import uuid
-import qrcode
 
 load_dotenv()
 
 etapa = 0
 frase_global = "Olá, prazer, eu me chamo Líria, a minha pergunta é, como você imagina o mundo se a paz mundial fosse adquirida? Darei um tempinho para você pensar, não se preocupe."
 usuario = "Nenhum"
-imagem_aprovada = 0
-imagem_necessita_aprovacao = 0
 url_imagem = ""
 prompt_mundo_perfeito = ""
+json_imagem_gerada = {}
 
 client = OpenAI(
     api_key=os.getenv("OPENAI_CHAVE_API"),
@@ -54,18 +52,6 @@ def carregar_interface():
     else:
         etapa = 0
         return render_template("index.html")
-    
-@app.route('/gerenciar')
-def carregar_painel_gerenciamento():
-    return send_file(os.path.join(os.getcwd(), 'admin', 'index.html'))
-
-@app.route('/gerenciar/js/<filename>')
-def gerenciar_js_file(filename):
-    return send_file(os.path.join(os.getcwd(), 'admin', 'js', filename))
-
-@app.route('/gerenciar/css/<filename>')
-def gerenciar_css_file(filename):
-    return send_file(os.path.join(os.getcwd(), 'admin', 'css', filename))
 
 @app.route('/js/<filename>')
 def send_js_file(filename):
@@ -135,24 +121,13 @@ def servir_audio(filename):
     except Exception as e:
         return f"Erro carregando o audio: <br> {str(e)}", 500
 
-@app.route('/api/frase')
-def servir_frase():
-    global frase_global
-    return frase_global
-
-@app.route('/api/gerenciar/<tipo>')
-def api_gerenciar(tipo):
-    if tipo == 'nome':
-        return usuario.capitalize()
-    if tipo == 'frase':
-        return frase_global
-
 # APIs (Gerações LLM)
 
 @app.route('/api/gerar_audio/', methods=["POST"])
 def gerar_audio():
     global frase_global
     global usuario
+    global etapa
 
     data = request.json
     nome = data.get("nome").lower()
@@ -162,7 +137,7 @@ def gerar_audio():
     if not nome:
         return jsonify({"erro": "Informe o nome"}), 400
     
-    frase = f"Olá {nome.capitalize()}, prazer, eu me chamo Líria, a minha pergunta é, como você imagina o mundo se a paz mundial fosse adiquirida? Darei um tempinho para você pensar, não se preocupe. Seja criativo."
+    frase = f"Olá {nome.capitalize()}, prazer, eu me chamo Líria! Como você imagina o mundo se a paz mundial fosse alcançada?"
     frase_global = frase
 
     try:
@@ -212,6 +187,7 @@ def gerar():
     mundo_perfeito = data.get("mundo_perfeito")
     global url_imagem
     global prompt_mundo_perfeito
+    global json_imagem_gerada
 
     prompt_mundo_perfeito = mundo_perfeito
 
@@ -239,7 +215,6 @@ def gerar():
         )
 
         b64_imagem = imagem.data[0].b64_json
-        qrcode.make(b64_imagem).save(os.path.join(os.getcwd(), 'qrcode', f"{uuid.uuid4()}.png"))
         img_bytes = base64.b64decode(b64_imagem)
 
         filename = f"{uuid.uuid4()}.png"
@@ -251,37 +226,16 @@ def gerar():
         url_imagem = local_url
         qr_local_url = f"http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/qrcode/{filename}"
 
-        return jsonify({
+        json_imagem_gerada = {
             "nome": nome,
             "mundo_perfeito": mundo_perfeito,
             "imagem_url": local_url,
-            "imagem_qrcode": qr_local_url
-        })
+        }
+
+        return jsonify(json_imagem_gerada)
 
     except Exception as e:
         return jsonify({"erro": f"Erro ao gerar conteúdo: {str(e)}"}), 500
-    
-@app.route('/api/status_imagem')
-def status_imagem():
-    global imagem_aprovada
-    aprovacao = request.args.get('aprovacao')
-
-    if aprovacao != None:
-        imagem_aprovada = int(aprovacao)
-        return 'ok'
-    
-    if int(aprovacao) == 1: return 'ok'
-    elif int(aprovacao) == 0: return 'wait'
-    elif int(aprovacao) == 2: return 'no'
-    else: return 'regen'
-
-@app.route('/api/imagem_gerada')
-def retornar_imagem_gerada():
-    return url_imagem
-
-@app.route('/api/prompt_mp')
-def prompt_mp():
-    return prompt_mundo_perfeito
 
 if __name__ == '__main__':
     app.run(host=os.getenv("HOST"), port=int(os.getenv("PORTA")))
