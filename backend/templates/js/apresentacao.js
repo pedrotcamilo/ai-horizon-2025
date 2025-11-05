@@ -4,9 +4,10 @@ let paginaSplit = pagina.split("/")
 let paginaRaw = `http://${paginaSplit[2]}`
 
 document.getElementById("btnProsseguir").onclick = function(e) {
+    let nome = document.getElementById("nome").value
+    
     if (nome.length > 0) {        
         document.getElementById("btnProsseguir").style.display = "none"
-        let nome = document.getElementById("nome").value
         let nome_formatado = nome.split(" ")
     
     
