@@ -80,6 +80,8 @@ async function executar() {
         console.log("Chamada para gerar a imagem...");
         await gerar_imagem(usuario, mundo_perfeito);
 
+        location.reload()
+
     } catch (error) {
         console.error("Erro no fluxo de execução:", error);
     }
