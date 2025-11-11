@@ -2,24 +2,29 @@ from flask import Flask, render_template, jsonify, send_file, request, redirect
 from flask_cors import CORS
 from dotenv import load_dotenv
 from openai import OpenAI
+from pydub import AudioSegment
 
 import os
 import base64
 import uuid
+import tempfile
+import speech_recognition as sr
 
 load_dotenv()
 
 etapa = 0
-frase_global = "Olá, prazer, eu me chamo Líria, a minha pergunta é, como você imagina o mundo se a paz mundial fosse adquirida? Darei um tempinho para você pensar, não se preocupe."
+frase_global = "Olá, prazer, eu me chamo Líria! Como você imagina o mundo se a paz mundial fosse alcançada?"
 usuario = "Nenhum"
 url_imagem = ""
 prompt_mundo_perfeito = ""
+transcript_audio_recebido = ""
+url_audio = f'http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/audio/frase_generica.mp3'
 json_imagem_gerada = {}
 
 client = OpenAI(
     api_key=os.getenv("OPENAI_CHAVE_API"),
     organization=os.getenv("OPENAI_CHAVE_ORGANIZACAO")
-)
+)   
 
 if not os.path.exists('imagens'): os.makedirs('imagens')
 if not os.path.exists('audios'): os.makedirs('audios')
@@ -35,10 +40,13 @@ def carregar_interface():
     global url_imagem
     global usuario
     global frase_global
+    global url_audio
     if etapa == 0: 
         url_imagem = "" 
         usuario = ""
-        frase_global = "Olá, prazer, eu me chamo Líria, a minha pergunta é, como você imagina o mundo se a paz mundial fosse adquirida? Darei um tempinho para você pensar, não se preocupe."
+        frase_global = "Olá, prazer, eu me chamo Líria! Como você imagina o mundo se a paz mundial fosse alcançada?"
+        url_audio = f'http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/audio/frase_generica.mp3'
+
         return render_template("index.html")
     elif etapa == 1: return render_template("apresentacao.html")
     elif etapa == 2: return render_template("IAra.html")
@@ -103,19 +111,18 @@ def servir_imagem(filename):
 
 @app.route('/api/audio/<filename>')
 def servir_audio(filename):
-    args = request.args.get('audioNomeFixo')
-
     try:
-        if int(args) == 1:
-            return send_file(os.path.join(os.getcwd(), 'audios', 'audio_SeuNome.mp3'))
-        else:    
-            return send_file(os.path.join(os.getcwd(), 'audios', filename))
+        return send_file(os.path.join(os.getcwd(), 'audios', filename))
     except Exception as e:
         return f"Erro carregando o audio: <br> {str(e)}", 500
     
 @app.route('/api/frase')
 def servir_frase():
     return frase_global
+
+@app.route('/api/audio/url')
+def servir_url_audio():
+    return url_audio
 
 # APIs (Gerações LLM)
 
@@ -124,6 +131,7 @@ def gerar_audio():
     global frase_global
     global usuario
     global etapa
+    global url_audio
 
     data = request.json
     nome = data.get("nome").lower()
@@ -151,6 +159,7 @@ def gerar_audio():
         filepath = os.path.join(os.getcwd(), "audios", filename)
 
         url = f"http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/audio/{filename}"
+        url_audio = url
 
         return jsonify({"audio_url": url})
     except Exception as e:
@@ -231,6 +240,48 @@ def gerar():
 
     except Exception as e:
         return jsonify({"erro": f"Erro ao gerar conteúdo: {str(e)}"}), 500
+    
+@app.route("/api/receberAudio", methods=["POST"])
+def receber_audio():
+    global transcript_audio_recebido
+    global prompt_mundo_perfeito
+
+    if "audio" not in request.files:
+        return jsonify({"error": "Nenhum arquivo de áudio enviado"}), 400
+
+    audio_file = request.files["audio"]
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_in:
+        audio_file.save(tmp_in.name)
+        input_path = tmp_in.name
+
+    wav_path = tempfile.mktemp(suffix=".wav")
+    try:
+        AudioSegment.from_file(input_path).export(wav_path, format="wav")
+    except Exception as e:
+        return jsonify({"error": f"Erro ao converter áudio: {e}"}), 500
+
+    recognizer = sr.Recognizer()
+
+    try:
+        with sr.AudioFile(wav_path) as source:
+            audio_data = recognizer.record(source)
+            texto = recognizer.recognize_google(audio_data, language="pt-BR")
+        
+        transcript_audio_recebido = texto
+        prompt_mundo_perfeito = texto
+        return jsonify({"transcricao": texto})
+    except sr.UnknownValueError:
+        return jsonify({"erro": "Não foi possível entender o áudio"}), 400
+    except sr.RequestError as e:
+        return jsonify({"erro": f"Erro no serviço de reconhecimento: {e}"}), 500
+    finally:
+        os.remove(input_path)
+        os.remove(wav_path)
+
+@app.route("/api/retornarTranscript")
+def retornar_transcript():
+    return transcript_audio_recebido
     
 @app.route("/api/receberMundoPerfeito", methods=["POST"])
 def receber_mundo_perfeito():
