@@ -94,6 +94,12 @@ def descer_etapa():
     etapa -= 1
     return redirect("/")
 
+@app.route("/api/resetarEtapas")
+def reset_etapa():
+    global etapa
+    etapa = 1
+    return redirect("/")
+
 @app.route('/api/etapa')
 def devolver_etapa():
     args = request.args.get('atualizarManualmente')
@@ -239,6 +245,7 @@ def gerar():
         return jsonify(json_imagem_gerada)
 
     except Exception as e:
+        url_imagem = f'http://{os.getenv("HOST")}:{os.getenv("PORTA")}/api/imagem/imagem_generica.png'
         return jsonify({"erro": f"Erro ao gerar conteúdo: {str(e)}"}), 500
     
 @app.route("/api/receberAudio", methods=["POST"])
@@ -297,7 +304,10 @@ def retornar_mundo_perfeito():
 
 @app.route('/api/url_imagem')
 def retornar_url_imagem():
-    return url_imagem
+    if len(url_imagem) > 0:
+        return url_imagem
+    else:
+        return f"http://{os.getenv("HOST").replace("0.0.0.0", ("127.0.0.1"))}:{os.getenv("PORTA")}/api/imagem/imagem_generica.png"
 
 @app.route('/api/usuario')
 def retornar_usuario():
